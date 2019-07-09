@@ -1,6 +1,7 @@
 let camera;
 let canvas;
 let capture;
+let threshSlider; 
 
 function setup() {
     canvas = createCanvas(320, 240);
@@ -9,20 +10,26 @@ function setup() {
     capture.hide(); 
     frameRate(60); 
 
+    threshSlider = createSlider(0, 255, 100);
+    threshSlider.position(20, 210);
+    textSize(12);
+    noStroke();
+  
+
+
 }
 
 function draw() {
    
     background(128);
 
-    // nous indiquons que nous allons ecrire dans la variable "pixels" pour dessiner dans la fenetre
     capture.loadPixels();
-
+    const thresh = threshSlider.value();
     for (let i = 0; i<320; i++){
         for (let j = 0; j<240; j++){
             var index = (i+j*width)*4;
             var brightness = (capture.pixels[index + 0] + capture.pixels[index + 1] + capture.pixels[index + 2])/3;  
-            if (brightness > 200){
+            if (brightness > thresh){
                 capture.pixels[index + 1] = 0;
             }
         }        
@@ -30,8 +37,8 @@ function draw() {
 
     capture.updatePixels(); 
     image(capture, 0, 0);
+    text('Brightness threshold', 180, 225);
 
-  
 
 
 
